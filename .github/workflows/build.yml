@@ -1,4 +1,4 @@
-name: Build
+name: tag build and publish image
 
 on:
   push:
