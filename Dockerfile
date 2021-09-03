@@ -1,4 +1,4 @@
-FROM deluan/navidrome:0.44.1
+FROM deluan/navidrome:0.45.1
 
 RUN apk add --no-cache --update \
     sox \
