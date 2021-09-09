@@ -24,10 +24,12 @@ precision=$(sox --i "${file}" | grep "Precision" | sed -r 's/.* ([0-9]+)/\1/g')
 
 if [ "${sample_rate}" -gt 48000 ] &&  [ "${precision}" == "24-bit" ]; then
   log "${file} is ${precision}@${sample_rate}, downsampling to 24-bit@48000..."
-  sox "${file}" -b 24 -t flac - rate 48000 dither -s
   #ffmpeg -i "${file}" -resampler soxr -sample_fmt s24 -ar 48000 -f flac -
+
+  ffmpeg -i "${file}" -map 0:a -c:a copy -map_metadata -1 -f flac - | \
+    sox - -b 24 -t flac - rate 48000 dither -s
 else
   log "${file} is ${precision}@${sample_rate}, using as is..."
-  cat "${file}"
+  ffmpeg -i "${file}" -map 0:a -c:a copy -map_metadata -1 -f flac -
 fi
 
